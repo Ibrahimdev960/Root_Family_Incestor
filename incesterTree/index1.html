@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Family Tree</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      min-width: 200px;
+    }
+    
+    label {
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    
+    input, select {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: #3498db;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #2980b9;
+    }
+    
+    .btn-danger {
+      background: #e74c3c;
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background: #c0392b;
+    }
+    
+    .btn-success {
+      background: #2ecc71;
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background: #27ae60;
+    }
+    
+    .btn-warning {
+      background: #f39c12;
+      color: white;
+    }
+    
+    .btn-warning:hover {
+      background: #d35400;
+    }
+    
+    .data-management {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .zoom-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .tree-wrapper {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .tree-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      transition: transform 0.1s ease;
+      padding: 40px;
+    }
+    
+    /* Tree styling */
+    .tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .level {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 60px;
+    }
+    
+    .node {
+      position: relative;
+      margin: 0 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .node-content {
+      padding: 12px 20px 12px 35px;
+      background: #3498db;
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      position: relative;
+      z-index: 2;
+      min-width: 120px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .node-content:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+      background: #2980b9;
+    }
+    
+    .node-content.main {
+      background: #2c3e50;
+    }
+    
+    .node-content.female {
+      background: #e84393;
+    }
+    
+    .node-content.female:hover {
+      background: #fd79a8;
+    }
+    
+    .node-content.male {
+      background: #0984e3;
+    }
+    
+    .node-content.male:hover {
+      background: #74b9ff;
+    }
+    
+    .expand-button {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 3;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    .expand-button:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+    
+    .connector {
+      position: absolute;
+      background: #7f8c8d;
+      z-index: 1;
+    }
+    
+    .vertical-connector {
+      width: 2px;
+      height: 30px;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .horizontal-connector {
+      height: 3px;
+      width: 100%;
+      /* top: 50%; */
+      /* flex-grow: 1; */
+      margin:-88px 15px;
+      position: absolute;
+      top: 113px
+      /* transform: translateY(-50%);
+      left: 0; */
+    }
+    
+    .children {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      margin-top: 30px;
+    }
+    
+    .child-node {
+      position: relative;
+      margin: 0 15px;
+    }
+    
+    .instructions {
+      text-align: center;
+      margin-top: 20px;
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+    
+    /* Node details */
+    .node-details {
+      position: absolute;
+      top: -70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      font-size: 12px;
+      color: #2c3e50;
+      min-width: 120px;
+      text-align: center;
+      z-index: 10;
+      display: none;
+    }
+    
+    /* .node:hover .node-details {
+      display: block;
+    } */
+    
+    .backup-section {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .backup-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    
+    .file-input {
+      display: none;
+    }
+    
+    .file-label {
+      padding: 10px 15px;
+      background: #9b59b6;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    
+    .file-label:hover {
+      background: #8e44ad;
+    }
+    
+    /* @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+      }
+      
+      .level {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .node {
+        margin: 10px 0;
+      }
+      
+      .children {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .child-node {
+        margin: 10px 0;
+      }
+      
+      .horizontal-connector {
+        width: 2px;
+        height: 20px;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      
+      .backup-controls {
+        flex-direction: column;
+      }
+      
+      .node-content {
+        padding: 12px 20px 12px 35px;
+      }
+    } */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Interactive Family Tree</h1>
+      <p>Visualize your family connections with this interactive tool</p>
+    </header>
+    
+    <div class="controls">
+      <div class="form-group">
+        <label for="parent">Parent Name</label>
+        <input type="text" id="parent" placeholder="Enter parent name" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="child">Child Name</label>
+        <input type="text" id="child" placeholder="Enter child name" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      
+      <div class="form-group" style="justify-content: flex-end;">
+        <button id="addMember" class="btn-primary">Add Member</button>
+        <button id="clearTree" class="btn-danger" style="margin-top: 10px;">Clear Tree</button>
+      </div>
+      
+      <div class="zoom-controls">
+        <button id="zoomIn" class="btn-success">Zoom In</button>
+        <button id="zoomOut" class="btn-success">Zoom Out</button>
+        <button id="resetView" class="btn-primary">Reset View</button>
+      </div>
+    </div>
+    
+    <div class="tree-wrapper" id="treeWrapper">
+      <div class="tree-container" id="treeContainer">
+        <div class="tree" id="treeVisualization">
+          <!-- Tree will be generated here -->
+        </div>
+      </div>
+    </div>
+    
+    <div class="backup-section">
+      <h3 style="text-align: center; margin-bottom: 15px; color: #2c3e50;">Data Backup & Restore</h3>
+      <div class="backup-controls">
+        <button id="exportData" class="btn-warning">Export Family Tree</button>
+        <input type="file" id="importFile" class="file-input" accept=".json">
+        <label for="importFile" class="file-label">Import Family Tree</label>
+      </div>
+    </div>
+    
+    <p class="instructions">Click on nodes to expand/collapse branches. Use your mouse wheel to zoom in/out. Click and drag to pan around the tree.</p>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // DOM elements
+      const treeVisualization = document.getElementById('treeVisualization');
+      const treeWrapper = document.getElementById('treeWrapper');
+      const treeContainer = document.getElementById('treeContainer');
+      const addMemberBtn = document.getElementById('addMember');
+      const clearTreeBtn = document.getElementById('clearTree');
+      const zoomInBtn = document.getElementById('zoomIn');
+      const zoomOutBtn = document.getElementById('zoomOut');
+      const resetViewBtn = document.getElementById('resetView');
+      const exportDataBtn = document.getElementById('exportData');
+      const importFileInput = document.getElementById('importFile');
+      
+      // Tree data structure
+      let familyTree = {
+        name: 'Khair Ali',
+        gender: 'male',
+        children: [],
+        expanded: true
+      };
+      
+      // View state
+      let scale = 1;
+      let posX = 0;
+      let posY = 0;
+      let isDragging = false;
+      let startX, startY;
+      
+      // Initialize the tree
+      function init() {
+        loadTree();
+        renderTree();
+        setupEventListeners();
+      }
+      
+      // Load tree from localStorage
+      function loadTree() {
+        const savedTree = localStorage.getItem('familyTree');
+        if (savedTree) {
+          try {
+            const parsedTree = JSON.parse(savedTree);
+            // Ensure all nodes have the expanded property
+            familyTree = addExpandedProperty(parsedTree);
+          } catch (e) {
+            console.error("Error parsing saved tree data:", e);
+            alert("Error loading saved data. Starting with a fresh tree.");
+            familyTree = {
+              name: 'Khair Ali',
+              gender: 'male',
+              children: [],
+              expanded: true
+            };
+          }
+        }
+      }
+      
+      // Recursively add expanded property to all nodes
+      function addExpandedProperty(node) {
+        const newNode = {...node};
+        if (newNode.expanded === undefined) {
+          newNode.expanded = true;
+        }
+        
+        if (newNode.children && newNode.children.length > 0) {
+          newNode.children = newNode.children.map(child => addExpandedProperty(child));
+        }
+        
+        return newNode;
+      }
+      
+      // Save tree to localStorage
+      function saveTree() {
+        try {
+          localStorage.setItem('familyTree', JSON.stringify(familyTree));
+        } catch (e) {
+          console.error("Error saving tree to localStorage:", e);
+          alert("Error saving data. The tree might be too large for localStorage.");
+        }
+      }
+      
+      // Find a person in the tree
+      function findPerson(name, node = familyTree) {
+        if (node.name === name) return node;
+        
+        if (node.children && node.children.length > 0) {
+          for (const child of node.children) {
+            const found = findPerson(name, child);
+            if (found) return found;
+          }
+        }
+        
+        return null;
+      }
+      
+      // Add a new family member
+      function addFamilyMember(parentName, childName, gender) {
+        // Input validation
+        if (!parentName.trim() || !childName.trim()) {
+          alert('Please enter valid names');
+          return false;
+        }
+        
+        const parent = findPerson(parentName);
+        
+        if (parent) {
+          if (!parent.children) parent.children = [];
+          
+          // Check if child already exists
+          const childExists = parent.children.some(child => child.name === childName);
+          if (childExists) {
+            alert(`A child named "${childName}" already exists for "${parentName}"`);
+            return false;
+          }
+          
+          parent.children.push({
+            name: childName,
+            gender: gender,
+            children: [],
+            expanded: true
+          });
+          
+          // Expand the parent to show children
+          parent.expanded = true;
+          
+          saveTree();
+          return true;
+        }
+        
+        return false;
+      }
+      
+      // Toggle node expansion
+      function toggleNode(node) {
+        if (node.children && node.children.length > 0) {
+          node.expanded = !node.expanded;
+          saveTree();
+          renderTree();
+        }
+      }
+      
+      // Render the tree visualization
+      function renderTree() {
+        treeVisualization.innerHTML = '';
+        
+        const treeLevel = document.createElement('div');
+        treeLevel.className = 'level';
+        
+        const rootNode = createNodeElement(familyTree, true);
+        treeLevel.appendChild(rootNode);
+        
+        treeVisualization.appendChild(treeLevel);
+      }
+      
+      // Create a node element
+      function createNodeElement(node, isRoot = false) {
+        const nodeContainer = document.createElement('div');
+        nodeContainer.className = 'node';
+        
+        // Add connector if not the root node
+        if (!isRoot) {
+          const connector = document.createElement('div');
+          connector.className = 'connector vertical-connector';
+          nodeContainer.appendChild(connector);
+        }
+        
+        const nodeContent = document.createElement('div');
+        nodeContent.className = `node-content ${node.gender}`;
+        if (isRoot) nodeContent.classList.add('main');
+        nodeContent.textContent = node.name;
+        nodeContent.addEventListener('click', () => toggleNode(node));
+        
+        // Add expand/collapse button if node has children
+        if (node.children && node.children.length > 0) {
+          const expandButton = document.createElement('div');
+          expandButton.className = 'expand-button';
+          expandButton.textContent = node.expanded ? '-' : '+';
+          expandButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleNode(node);
+          });
+          nodeContent.appendChild(expandButton);
+        }
+        
+        // Add details on hover
+        const nodeDetails = document.createElement('div');
+        nodeDetails.className = 'node-details';
+        nodeDetails.textContent = `Click to ${node.expanded ? 'collapse' : 'expand'}`;
+        nodeContainer.appendChild(nodeDetails);
+        
+        nodeContainer.appendChild(nodeContent);
+        
+        // Add children if any and if expanded
+        if (node.children && node.children.length > 0 && node.expanded) {
+          const childrenContainer = document.createElement('div');
+          childrenContainer.className = 'children';
+          
+          // Add horizontal connector above children
+          if (node.children.length > 1) {
+            const horizontalConnector = document.createElement('div');
+            horizontalConnector.className = 'connector horizontal-connector';
+            childrenContainer.appendChild(horizontalConnector);
+          }
+          
+          node.children.forEach(child => {
+            const childElement = createNodeElement(child);
+            childrenContainer.appendChild(childElement);
+          });
+          
+          nodeContainer.appendChild(childrenContainer);
+        }
+        
+        return nodeContainer;
+      }
+      
+      // Export family tree data as JSON file
+      function exportTreeData() {
+        try {
+          const dataStr = JSON.stringify(familyTree, null, 2);
+          const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+          
+          const exportFileDefaultName = 'family-tree.json';
+          
+          const linkElement = document.createElement('a');
+          linkElement.setAttribute('href', dataUri);
+          linkElement.setAttribute('download', exportFileDefaultName);
+          linkElement.click();
+        } catch (e) {
+          console.error("Error exporting data:", e);
+          alert("Error exporting family tree data.");
+        }
+      }
+      
+      // Import family tree data from JSON file
+      function importTreeData(file) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          try {
+            const contents = e.target.result;
+            const importedTree = JSON.parse(contents);
+            
+            // Validate the imported data structure
+            if (!importedTree.name || !importedTree.gender) {
+              throw new Error("Invalid family tree data structure");
+            }
+            
+            if (confirm("Importing data will replace your current family tree. Continue?")) {
+              familyTree = addExpandedProperty(importedTree);
+              saveTree();
+              renderTree();
+              alert("Family tree imported successfully!");
+            }
+          } catch (e) {
+            console.error("Error importing data:", e);
+            alert("Error importing family tree data. The file may be corrupted or invalid.");
+          }
+        };
+        
+        reader.onerror = function() {
+          alert("Error reading file");
+        };
+        
+        reader.readAsText(file);
+      }
+      
+      // Setup event listeners
+      function setupEventListeners() {
+        // Add member button
+        addMemberBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const parentName = document.getElementById('parent').value.trim();
+          const childName = document.getElementById('child').value.trim();
+          const gender = document.getElementById('gender').value;
+          
+          if (!parentName || !childName) {
+            alert('Please enter both parent and child names');
+            return;
+          }
+          
+          if (addFamilyMember(parentName, childName, gender)) {
+            renderTree();
+            document.getElementById('parent').value = '';
+            document.getElementById('child').value = '';
+          } else {
+            alert(`Parent "${parentName}" not found in the tree`);
+          }
+        });
+        
+        // Clear tree button
+        clearTreeBtn.addEventListener('click', function() {
+          if (confirm('Are you sure you want to clear the entire tree?')) {
+            familyTree = {
+              name: 'Main Ancestor',
+              gender: 'male',
+              children: [],
+              expanded: true
+            };
+            saveTree();
+            renderTree();
+          }
+        });
+        
+        // Zoom controls
+        zoomInBtn.addEventListener('click', function() {
+          scale += 0.1;
+          updateTransform();
+        });
+        
+        zoomOutBtn.addEventListener('click', function() {
+          scale -= 0.1;
+          updateTransform();
+        });
+        
+        resetViewBtn.addEventListener('click', function() {
+          scale = 1;
+          posX = 0;
+          posY = 0;
+          updateTransform();
+        });
+        
+        // Export data button
+        exportDataBtn.addEventListener('click', exportTreeData);
+        
+        // Import file input
+        importFileInput.addEventListener('change', function(e) {
+          if (this.files && this.files.length > 0) {
+            importTreeData(this.files[0]);
+            this.value = ''; // Reset the input
+          }
+        });
+        
+        // Mouse wheel zoom
+        treeWrapper.addEventListener('wheel', function(e) {
+          e.preventDefault();
+          scale += e.deltaY * -0.001;
+          scale = Math.min(Math.max(0.1, scale), 3);
+          updateTransform();
+        });
+        
+        // Panning
+        treeWrapper.addEventListener('mousedown', function(e) {
+          isDragging = true;
+          startX = e.clientX - posX;
+          startY = e.clientY - posY;
+          treeWrapper.style.cursor = 'grabbing';
+        });
+        
+        document.addEventListener('mouseup', function() {
+          isDragging = false;
+          treeWrapper.style.cursor = 'grab';
+        });
+        
+        document.addEventListener('mousemove', function(e) {
+          if (isDragging) {
+            posX = e.clientX - startX;
+            posY = e.clientY - startY;
+            updateTransform();
+          }
+        });
+      }
+      
+      // Update the transform of the tree container
+      function updateTransform() {
+        treeContainer.style.transform = `translate(calc(-50% + ${posX}px), calc(-50% + ${posY}px)) scale(${scale})`;
+      }
+      
+      // Initialize the application
+      init();
+    });
+  </script>
+</body>
+</html>

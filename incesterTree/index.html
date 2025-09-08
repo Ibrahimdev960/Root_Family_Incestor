@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Family Tree</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Interactive Family Tree</h1>
+      <p>Visualize your family connections with this interactive tool</p>
+    </header>
+    
+    <div class="controls">
+      <div class="form-group">
+        <label for="parent">Parent Name</label>
+        <input type="text" id="parent" placeholder="Enter parent name" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="child">Child Name</label>
+        <input type="text" id="child" placeholder="Enter child name" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      
+      <div class="form-group" style="justify-content: flex-end;">
+        <button id="addMember" class="btn-primary">Add Member</button>
+        <button id="clearTree" class="btn-danger" style="margin-top: 10px;">Clear Tree</button>
+      </div>
+      
+      <div class="zoom-controls">
+        <button id="zoomIn" class="btn-success">Zoom In</button>
+        <button id="zoomOut" class="btn-success">Zoom Out</button>
+        <button id="resetView" class="btn-primary">Reset View</button>
+        <button id="fullView" class="btn-warning">Full View</button>
+      </div>
+    </div>
+    
+    <div class="tree-wrapper" id="treeWrapper">
+      <div class="tree-container" id="treeContainer">
+        <div class="tree" id="treeVisualization">
+          <!-- Tree will be generated here -->
+        </div>
+      </div>
+    </div>
+    
+    <div class="backup-section">
+      <h3 style="text-align: center; margin-bottom: 15px; color: #2c3e50;">Data Backup & Restore</h3>
+      <div class="backup-controls">
+        <button id="exportData" class="btn-warning">Export Family Tree</button>
+        <input type="file" id="importFile" class="file-input" accept=".json">
+        <label for="importFile" class="file-label">Import Family Tree</label>
+      </div>
+    </div>
+    
+    <p class="instructions">Click on nodes to expand/collapse branches. Use your mouse wheel to zoom in/out. Click and drag to pan around the tree.</p>
+  </div>
+
+  <!-- Full View Modal -->
+  <div id="fullViewModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Full Family Tree View</h2>
+      <div class="full-tree-container" id="fullTreeContainer">
+        <!-- Full tree will be rendered here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/app.js"></script>
+</body>
+</html>
