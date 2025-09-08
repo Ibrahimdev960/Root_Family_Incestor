@@ -51,18 +51,6 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
     
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      min-width: 200px;
-    }
-    
-    label {
-      margin-bottom: 5px;
-      font-weight: 600;
-      color: #2c3e50;
-    }
-    
     input, select {
       padding: 10px;
       border: 1px solid #ddd;
@@ -81,15 +69,19 @@
     
     .btn-primary { background: #3498db; color: white; }
     .btn-primary:hover { background: #2980b9; }
-    .btn-danger { background: #e74c3c; color: white; }
-    .btn-danger:hover { background: #c0392b; }
     .btn-success { background: #2ecc71; color: white; }
     .btn-success:hover { background: #27ae60; }
-    .btn-warning { background: #f39c12; color: white; }
-    .btn-warning:hover { background: #d35400; }
     
-    .data-management { display: flex; flex-direction: column; gap: 10px; }
     .zoom-controls { display: flex; gap: 10px; align-items: center; }
+
+    /* Search box */
+    #searchBox {
+      padding: 10px;
+      border: 2px solid #3498db;
+      border-radius: 6px;
+      font-size: 16px;
+      width: 250px;
+    }
     
     .tree-wrapper {
       position: relative;
@@ -97,21 +89,20 @@
       height: 70vh;
       background: white;
       border-radius: 12px;
-      overflow: auto; /* ✅ allow scrolling */
+      overflow: auto; 
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      touch-action: pan-x pan-y; /* ✅ enable swipe scrolling on mobile */
+      touch-action: pan-x pan-y;
     }
     
     .tree-container {
       position: relative;
-      display: inline-block; /* ✅ expands as tree grows */
+      display: inline-block;
       transform: scale(1);
       transform-origin: top left;
       transition: transform 0.1s ease;
       padding: 40px;
     }
     
-    /* Tree styling */
     .tree { display: flex; flex-direction: column; align-items: center; }
     .level { display: flex; justify-content: center; width: 100%; margin-bottom: 60px; }
     
@@ -135,22 +126,28 @@
       text-align: center;
       transition: all 0.3s ease;
       cursor: pointer;
+      font-size: 16px;
     }
     
-    .node-content:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); background: #2980b9; }
+    .node-content:hover { transform: translateY(-3px); }
     .node-content.main { background: #2c3e50; }
     .node-content.female { background: #e84393; }
-    .node-content.female:hover { background: #fd79a8; }
     .node-content.male { background: #0984e3; }
-    .node-content.male:hover { background: #74b9ff; }
+
+    /* Highlight when searched */
+    .highlight {
+      background: yellow !important;
+      color: black !important;
+      border: 2px solid orange;
+    }
     
     .expand-button {
       position: absolute;
       left: 10px;
       top: 50%;
       transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
+      width: 12px;
+      height: 13px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.3);
       color: white;
@@ -162,7 +159,6 @@
       font-size: 14px;
       font-weight: bold;
     }
-    .expand-button:hover { background: rgba(255, 255, 255, 0.5); }
     
     .connector { position: absolute; background: #7f8c8d; z-index: 1; }
     .vertical-connector { width: 2px; height: 30px; top: -30px; left: 50%; transform: translateX(-50%); }
@@ -172,18 +168,21 @@
     .child-node { position: relative; margin: 0 15px; }
     
     .instructions { text-align: center; margin-top: 20px; color: #7f8c8d; font-size: 14px; }
-    
-    .backup-section {
-      margin-top: 20px;
-      padding: 15px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+    /* 📱 Mobile responsive */
+    @media (max-width: 600px) {
+      .node-content {
+        padding: 8px 12px 8px 25px;
+        font-size: 12px;
+        min-width: 80px;
+      }
+      #searchBox {
+        width: 100%;
+      }
+      .controls {
+        flex-direction: column;
+      }
     }
-    .backup-controls { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
-    .file-input { display: none; }
-    .file-label { padding: 10px 15px; background: #9b59b6; color: white; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; text-align: center; }
-    .file-label:hover { background: #8e44ad; }
   </style>
 </head>
 <body>
@@ -194,53 +193,22 @@
     </header>
     
     <div class="controls">
-      <div class="form-group">
-        <label for="parent">Parent Name</label>
-        <input type="text" id="parent" placeholder="Enter parent name" required />
-      </div>
-      
-      <div class="form-group">
-        <label for="child">Child Name</label>
-        <input type="text" id="child" placeholder="Enter child name" required />
-      </div>
-      
-      <div class="form-group">
-        <label for="gender">Gender</label>
-        <select id="gender">
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-      </div>
-      
-      <div class="form-group" style="justify-content: flex-end;">
-        <button id="addMember" class="btn-primary">Add Member</button>
-        <button id="clearTree" class="btn-danger" style="margin-top: 10px;">Clear Tree</button>
-      </div>
-      
+      <input type="text" id="searchBox" placeholder="🔍 Search by name..."/>
       <div class="zoom-controls">
-        <button id="zoomIn" class="btn-success">Zoom In</button>
-        <button id="zoomOut" class="btn-success">Zoom Out</button>
+        <button id="zoomIn" class="btn-success">Zoom out</button>
+        <button id="zoomOut" class="btn-success">Zoom In</button>
         <button id="resetView" class="btn-primary">Reset View</button>
       </div>
     </div>
     
     <div class="tree-wrapper" id="treeWrapper">
       <div class="tree-container" id="treeContainer">
-        <div class="tree" id="treeVisualization"><!-- Tree will be generated here --></div>
-      </div>
-    </div>
-    
-    <div class="backup-section">
-      <h3 style="text-align: center; margin-bottom: 15px; color: #2c3e50;">Data Backup & Restore</h3>
-      <div class="backup-controls">
-        <button id="exportData" class="btn-warning">Export Family Tree</button>
-        <input type="file" id="importFile" class="file-input" accept=".json"/>
-        <label for="importFile" class="file-label">Import Family Tree</label>
+        <div class="tree" id="treeVisualization"></div>
       </div>
     </div>
     
     <p class="instructions">
-      Click on nodes to expand/collapse branches. Swipe or scroll to move around the tree. Use zoom buttons if needed.
+      Click nodes to expand/collapse. For  Search to find members First expand tree . Pinch/zoom on mobile.
     </p>
   </div>
 
@@ -248,13 +216,10 @@
 document.addEventListener("DOMContentLoaded", function () {
   const treeVisualization = document.getElementById("treeVisualization");
   const treeContainer = document.getElementById("treeContainer");
-  const addMemberBtn = document.getElementById("addMember");
-  const clearTreeBtn = document.getElementById("clearTree");
   const zoomInBtn = document.getElementById("zoomIn");
   const zoomOutBtn = document.getElementById("zoomOut");
   const resetViewBtn = document.getElementById("resetView");
-  const exportDataBtn = document.getElementById("exportData");
-  const importFileInput = document.getElementById("importFile");
+  const searchBox = document.getElementById("searchBox");
 
   let familyTree = { name: "Main Ancestor", gender: "male", children: [], expanded: true };
   let scale = 1;
@@ -288,28 +253,8 @@ document.addEventListener("DOMContentLoaded", function () {
     return newNode;
   }
 
-  function saveTree() { localStorage.setItem("familyTree", JSON.stringify(familyTree)); }
-
-  function findPerson(name, node = familyTree) {
-    if (node.name === name) return node;
-    if (node.children) {
-      for (const child of node.children) {
-        const found = findPerson(name, child);
-        if (found) return found;
-      }
-    }
-    return null;
-  }
-
-  function addFamilyMember(parentName, childName, gender) {
-    const parent = findPerson(parentName);
-    if (!parent) return false;
-    if (!parent.children) parent.children = [];
-    if (parent.children.some((c) => c.name === childName)) return false;
-    parent.children.push({ name: childName, gender, children: [], expanded: true });
-    parent.expanded = true;
-    saveTree();
-    return true;
+  function saveTree() {
+    localStorage.setItem("familyTree", JSON.stringify(familyTree));
   }
 
   function toggleNode(node) {
@@ -342,6 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
     nodeContent.className = `node-content ${node.gender}`;
     if (isRoot) nodeContent.classList.add("main");
     nodeContent.textContent = node.name;
+    nodeContent.dataset.name = node.name; // store for search
     nodeContent.addEventListener("click", () => toggleNode(node));
 
     if (node.children && node.children.length > 0) {
@@ -374,64 +320,26 @@ document.addEventListener("DOMContentLoaded", function () {
     return nodeContainer;
   }
 
-  function exportTreeData() {
-    const dataStr = JSON.stringify(familyTree, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "family-tree.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  function importTreeData(file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const importedTree = JSON.parse(e.target.result);
-        if (!importedTree.name || !importedTree.gender) throw new Error();
-        if (confirm("This will replace the current tree. Continue?")) {
-          familyTree = addExpandedProperty(importedTree);
-          saveTree();
-          renderTree();
-          alert("Family tree imported successfully!");
-        }
-      } catch { alert("Invalid or corrupted file."); }
-    };
-    reader.readAsText(file);
+  // 🔍 Search feature
+  function searchTree(query) {
+    const allNodes = document.querySelectorAll(".node-content");
+    allNodes.forEach(node => {
+      node.classList.remove("highlight");
+      if (query && node.dataset.name.toLowerCase().includes(query.toLowerCase())) {
+        node.classList.add("highlight");
+        node.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+      }
+    });
   }
 
   function setupEventListeners() {
-    addMemberBtn.addEventListener("click", () => {
-      const parentName = document.getElementById("parent").value.trim();
-      const childName = document.getElementById("child").value.trim();
-      const gender = document.getElementById("gender").value;
-      if (addFamilyMember(parentName, childName, gender)) {
-        renderTree();
-      } else {
-        alert(`Parent "${parentName}" not found or child exists.`);
-      }
-    });
-
-    clearTreeBtn.addEventListener("click", () => {
-      if (confirm("Clear the entire tree?")) {
-        familyTree = { name: "Main Ancestor", gender: "male", children: [], expanded: true };
-        saveTree();
-        renderTree();
-      }
-    });
-
     zoomInBtn.addEventListener("click", () => { scale += 0.1; updateTransform(); });
     zoomOutBtn.addEventListener("click", () => { scale = Math.max(0.1, scale - 0.1); updateTransform(); });
     resetViewBtn.addEventListener("click", () => { scale = 1; updateTransform(); });
 
-    exportDataBtn.addEventListener("click", exportTreeData);
-    importFileInput.addEventListener("change", function () {
-      if (this.files.length > 0) {
-        importTreeData(this.files[0]);
-        this.value = "";
-      }
+    searchBox.addEventListener("input", (e) => {
+      const query = e.target.value.trim();
+      searchTree(query);
     });
   }
 
