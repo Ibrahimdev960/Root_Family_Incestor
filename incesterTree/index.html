@@ -71,6 +71,8 @@
     .btn-primary:hover { background: #2980b9; }
     .btn-success { background: #2ecc71; color: white; }
     .btn-success:hover { background: #27ae60; }
+    .btn-warning { background: #f39c12; color: white; }
+    .btn-warning:hover { background: #e67e22; }
     
     .zoom-controls { display: flex; gap: 10px; align-items: center; }
 
@@ -327,6 +329,8 @@
         <button id="zoomIn" class="btn-success">Zoom In</button>
         <button id="zoomOut" class="btn-success">Zoom Out</button>
         <button id="resetView" class="btn-primary">Reset View</button>
+        <button id="collapseAll" class="btn-warning">Collapse All</button>
+        <button id="expandAll" class="btn-success">Expand All</button>
         <span class="zoom-level" id="zoomLevel">100%</span>
       </div>
     </div>
@@ -388,6 +392,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const zoomInBtn = document.getElementById("zoomIn");
   const zoomOutBtn = document.getElementById("zoomOut");
   const resetViewBtn = document.getElementById("resetView");
+  const collapseAllBtn = document.getElementById("collapseAll");
+  const expandAllBtn = document.getElementById("expandAll");
   const searchBox = document.getElementById("searchBox");
   const zoomLevel = document.getElementById("zoomLevel");
 
@@ -417,7 +423,7 @@ document.addEventListener("DOMContentLoaded", function () {
         expanded: false 
       }
     ], 
-    expanded: true 
+    expanded: false // Start with root node collapsed by default
   };
 
   let scale = 1;
@@ -439,21 +445,21 @@ document.addEventListener("DOMContentLoaded", function () {
       const response = await fetch("/family-tree.json");
       if (!response.ok) throw new Error("JSON not found");
       const data = await response.json();
-      familyTree = addExpandedProperty(data);
+      familyTree = addExpandedProperty(data, false); // Start with all nodes collapsed
     } catch (err) {
       // Fall back to localStorage if available
       const savedTree = localStorage.getItem("familyTree");
       if (savedTree) {
-        familyTree = addExpandedProperty(JSON.parse(savedTree));
+        familyTree = addExpandedProperty(JSON.parse(savedTree), false);
       }
     }
   }
 
-  function addExpandedProperty(node) {
+  function addExpandedProperty(node, expanded = false) {
     const newNode = { ...node };
-    if (newNode.expanded === undefined) newNode.expanded = true;
+    newNode.expanded = expanded;
     if (newNode.children && newNode.children.length > 0) {
-      newNode.children = newNode.children.map(addExpandedProperty);
+      newNode.children = newNode.children.map(child => addExpandedProperty(child, expanded));
     }
     return newNode;
   }
@@ -467,6 +473,32 @@ document.addEventListener("DOMContentLoaded", function () {
       node.expanded = !node.expanded;
       saveTree();
       renderTree();
+    }
+  }
+
+  function collapseAllNodes() {
+    collapseNode(familyTree);
+    saveTree();
+    renderTree();
+  }
+
+  function collapseNode(node) {
+    node.expanded = false;
+    if (node.children && node.children.length > 0) {
+      node.children.forEach(child => collapseNode(child));
+    }
+  }
+
+  function expandAllNodes() {
+    expandNode(familyTree);
+    saveTree();
+    renderTree();
+  }
+
+  function expandNode(node) {
+    node.expanded = true;
+    if (node.children && node.children.length > 0) {
+      node.children.forEach(child => expandNode(child));
     }
   }
 
@@ -541,7 +573,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return nodeContainer;
   }
 
-  // 🔍 Search feature
+  // 🔍 Search feature - now works with collapsed nodes
   function searchTree(query) {
     const allNodes = document.querySelectorAll(".node-content");
     let found = false;
@@ -550,6 +582,10 @@ document.addEventListener("DOMContentLoaded", function () {
       node.classList.remove("highlight");
       if (query && node.dataset.name.toLowerCase().includes(query.toLowerCase())) {
         node.classList.add("highlight");
+        
+        // Expand all parent nodes to make the found node visible
+        expandParentsToShowNode(node);
+        
         if (!found) {
           // Scroll to the first found node
           const rect = node.getBoundingClientRect();
@@ -565,6 +601,70 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
     });
+  }
+
+  // Function to expand parent nodes to show a hidden node
+  function expandParentsToShowNode(nodeElement) {
+    let currentNode = nodeElement;
+    const nodesToExpand = [];
+    
+    // Traverse up the DOM to find all parent nodes
+    while (currentNode && !currentNode.classList.contains('level')) {
+      if (currentNode.classList.contains('node-content') && 
+          currentNode.nextElementSibling && 
+          currentNode.nextElementSibling.classList.contains('children')) {
+        // This node has children that might be collapsed
+        const expandButton = currentNode.querySelector('.expand-button');
+        if (expandButton && expandButton.textContent === '+') {
+          // This node is collapsed, we need to expand it
+          nodesToExpand.push(currentNode);
+        }
+      }
+      currentNode = currentNode.parentElement;
+    }
+    
+    // Expand all necessary nodes from top to bottom
+    for (let i = nodesToExpand.length - 1; i >= 0; i--) {
+      const node = nodesToExpand[i];
+      const nodeName = node.dataset.name;
+      
+      // Find the node in our data structure and expand it
+      expandNodeByName(familyTree, nodeName);
+    }
+    
+    // Re-render the tree if we expanded any nodes
+    if (nodesToExpand.length > 0) {
+      saveTree();
+      renderTree();
+      
+      // Re-highlight the searched node after re-rendering
+      setTimeout(() => {
+        const newNodes = document.querySelectorAll(".node-content");
+        newNodes.forEach(node => {
+          if (query && node.dataset.name.toLowerCase().includes(searchBox.value.trim().toLowerCase())) {
+            node.classList.add("highlight");
+          }
+        });
+      }, 100);
+    }
+  }
+
+  // Helper function to find and expand a node by name in the data structure
+  function expandNodeByName(node, name) {
+    if (node.name === name) {
+      node.expanded = true;
+      return true;
+    }
+    
+    if (node.children && node.children.length > 0) {
+      for (const child of node.children) {
+        if (expandNodeByName(child, name)) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
   }
 
   function setupEventListeners() {
@@ -593,6 +693,10 @@ document.addEventListener("DOMContentLoaded", function () {
         behavior: 'smooth'
       });
     });
+
+    // Collapse/Expand All buttons
+    collapseAllBtn.addEventListener("click", collapseAllNodes);
+    expandAllBtn.addEventListener("click", expandAllNodes);
 
     // Search functionality
     searchBox.addEventListener("input", (e) => {
