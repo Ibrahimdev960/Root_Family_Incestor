@@ -364,9 +364,18 @@
 /* 🔐 PIN Logic */
 const CORRECT_PIN = "7456"; // ✅ change this to your PIN
 
+// Check if already authenticated
+if (localStorage.getItem("pinAuthenticated") === "true") {
+  document.getElementById("pin-screen").style.display = "none";
+  document.querySelector(".container").style.display = "block";
+  document.querySelector("footer").style.display = "block";
+}
+
 document.getElementById("pin-submit").addEventListener("click", () => {
   const enteredPin = document.getElementById("pin-input").value;
   if (enteredPin === CORRECT_PIN) {
+    // Store authentication status
+    localStorage.setItem("pinAuthenticated", "true");
     document.getElementById("pin-screen").style.display = "none";
     document.querySelector(".container").style.display = "block";
     document.querySelector("footer").style.display = "block";
