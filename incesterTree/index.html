@@ -16,7 +16,7 @@
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       margin: 0;
       padding: 20px;
-      min-height: 100vh;
+      min-height: 100vh;  
       overflow-x: hidden;
     }
     
@@ -91,7 +91,8 @@
       border-radius: 12px;
       overflow: auto; 
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      touch-action: pan-x pan-y;
+      touch-action: none;
+      -webkit-overflow-scrolling: touch;
     }
     
     .tree-container {
@@ -101,6 +102,7 @@
       transform-origin: top left;
       transition: transform 0.1s ease;
       padding: 40px;
+      min-width: 100%;
     }
     
     .tree { display: flex; flex-direction: column; align-items: center; }
@@ -115,39 +117,76 @@
     }
     
     .node-content {
-      padding: 12px 20px 12px 35px;
+      padding: 15px 20px 15px 40px;
       background: #3498db;
       color: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
       position: relative;
       z-index: 2;
-      min-width: 120px;
-      text-align: center;
+      min-width: 160px;
+      text-align: left;
       transition: all 0.3s ease;
       cursor: pointer;
       font-size: 16px;
     }
     
-    .node-content:hover { transform: translateY(-3px); }
-    .node-content.main { background: #2c3e50; }
-    .node-content.female { background: #e84393; }
-    .node-content.male { background: #0984e3; }
+    /* Card view styling */
+    .card-content {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .card-name {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+    
+    .card-details {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .node-content:hover { 
+      transform: translateY(-3px) scale(1.02); 
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .node-content.main { 
+      background: #2c3e50; 
+      min-width: 180px;
+    }
+    
+    .node-content.female { 
+      background: linear-gradient(to bottom right, #e84393, #fd79a8); 
+    }
+    
+    .node-content.male { 
+      background: linear-gradient(to bottom right, #0984e3, #74b9ff); 
+    }
 
     /* Highlight when searched */
     .highlight {
       background: yellow !important;
       color: black !important;
       border: 2px solid orange;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 165, 0, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(255, 165, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 165, 0, 0); }
     }
     
     .expand-button {
       position: absolute;
-      left: 10px;
+      left: 15px;
       top: 50%;
       transform: translateY(-50%);
-      width: 12px;
-      height: 13px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.3);
       color: white;
@@ -158,6 +197,12 @@
       z-index: 3;
       font-size: 14px;
       font-weight: bold;
+      transition: all 0.2s ease;
+    }
+    
+    .expand-button:hover {
+      background: rgba(255, 255, 255, 0.5);
+      transform: translateY(-50%) scale(1.1);
     }
     
     .connector { position: absolute; background: #7f8c8d; z-index: 1; }
@@ -169,31 +214,80 @@
     
     .instructions { text-align: center; margin-top: 20px; color: #7f8c8d; font-size: 14px; }
 
+    /* Zoom percentage indicator */
+    .zoom-level {
+      margin-left: 10px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
     /* 📱 Mobile responsive */
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       .node-content {
-        padding: 8px 12px 8px 25px;
-        font-size: 12px;
-        min-width: 80px;
+        padding: 12px 15px 12px 35px;
+        font-size: 14px;
+        min-width: 140px;
       }
+      
+      .card-name {
+        font-size: 16px;
+      }
+      
+      .card-details {
+        font-size: 12px;
+      }
+      
       #searchBox {
         width: 100%;
       }
+      
       .controls {
         flex-direction: column;
       }
+      
+      .tree-container {
+        padding: 20px;
+      }
+      
+      .node {
+        margin: 0 10px;
+      }
     }
 
+    @media (max-width: 480px) {
+      .node-content {
+        padding: 10px 12px 10px 30px;
+        min-width: 120px;
+      }
+      
+      .expand-button {
+        left: 10px;
+        width: 18px;
+        height: 18px;
+        font-size: 12px;
+      }
+    }
     
     /* PIN Screen */
     #pin-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
       background: linear-gradient(135deg, #dfe6e9 0%, #b2bec3 100%);
+      z-index: 1000;
     }
+    
+    #pin-screen h2 {
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+    
     #pin-screen input {
       padding: 12px;
       font-size: 18px;
@@ -201,9 +295,11 @@
       border-radius: 6px;
       margin: 10px 0;
       text-align: center;
+      width: 200px;
     }
+    
     #pin-error {
-      color: red;
+      color: #e74c3c;
       margin-top: 10px;
       display: none;
     }
@@ -218,7 +314,8 @@
     <button id="pin-submit" class="btn-primary">Unlock</button>
     <p id="pin-error">Incorrect PIN. Try again.</p>
   </div>
-  <div class="container">
+  
+  <div class="container" style="display:none;">
     <header>
       <h1>Interactive Family Tree</h1>
       <p>Visualize your family connections with this interactive tool</p>
@@ -227,9 +324,10 @@
     <div class="controls">
       <input type="text" id="searchBox" placeholder="🔍 Search by name..."/>
       <div class="zoom-controls">
-        <button id="zoomIn" class="btn-success">Zoom out</button>
-        <button id="zoomOut" class="btn-success">Zoom In</button>
+        <button id="zoomIn" class="btn-success">Zoom In</button>
+        <button id="zoomOut" class="btn-success">Zoom Out</button>
         <button id="resetView" class="btn-primary">Reset View</button>
+        <span class="zoom-level" id="zoomLevel">100%</span>
       </div>
     </div>
     
@@ -240,7 +338,7 @@
     </div>
     
     <p class="instructions">
-      Click nodes to expand/collapse. For  Search to find members First expand tree . Pinch/zoom on mobile.
+      Click nodes to expand/collapse. First Expand and then search to find members. Pinch/scroll to zoom.
     </p>
   </div>
 
@@ -253,9 +351,11 @@
   text-align: center;
   font-size: 14px;
   color: #2c3e50;
+  display: none;
 ">
-  <p>© 2025 Interactive Family Tree | Made By ...</p>
+  <p>© 2025 Interactive Family Tree | Made with ❤️</p>
 </footer>
+
 <script>
 /* 🔐 PIN Logic */
 const CORRECT_PIN = "7456"; // ✅ change this to your PIN
@@ -268,34 +368,80 @@ document.getElementById("pin-submit").addEventListener("click", () => {
     document.querySelector("footer").style.display = "block";
   } else {
     document.getElementById("pin-error").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("pin-error").style.display = "none";
+    }, 2000);
+  }
+});
+
+// Allow submitting with Enter key
+document.getElementById("pin-input").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    document.getElementById("pin-submit").click();
   }
 });
 
 document.addEventListener("DOMContentLoaded", function () {
   const treeVisualization = document.getElementById("treeVisualization");
   const treeContainer = document.getElementById("treeContainer");
+  const treeWrapper = document.getElementById("treeWrapper");
   const zoomInBtn = document.getElementById("zoomIn");
   const zoomOutBtn = document.getElementById("zoomOut");
   const resetViewBtn = document.getElementById("resetView");
   const searchBox = document.getElementById("searchBox");
+  const zoomLevel = document.getElementById("zoomLevel");
 
-  let familyTree = { name: "Main Ancestor", gender: "male", children: [], expanded: true };
+  // Sample family tree data structure
+  let familyTree = { 
+    name: "John Smith", 
+    gender: "male", 
+    birthDate: "Jan 15, 1965",
+    children: [
+      { 
+        name: "Emily Smith", 
+        gender: "female", 
+        birthDate: "Mar 22, 1990",
+        children: [
+          { name: "Sophia Johnson", gender: "female", birthDate: "Jul 5, 2015", children: [] },
+          { name: "Liam Johnson", gender: "male", birthDate: "Dec 12, 2017", children: [] }
+        ], 
+        expanded: false 
+      },
+      { 
+        name: "Michael Smith", 
+        gender: "male", 
+        birthDate: "Aug 3, 1993",
+        children: [
+          { name: "Noah Smith", gender: "male", birthDate: "Feb 28, 2020", children: [] }
+        ], 
+        expanded: false 
+      }
+    ], 
+    expanded: true 
+  };
+
   let scale = 1;
   let lastDistance = null;
+  let isDragging = false;
+  let startX, startY, scrollLeft, scrollTop;
+  let lastTouchX, lastTouchY;
 
   async function init() {
     await loadTree();
     renderTree();
     setupEventListeners();
+    updateZoomLevel();
   }
 
   async function loadTree() {
     try {
+      // Try to load from a JSON file first
       const response = await fetch("/family-tree.json");
       if (!response.ok) throw new Error("JSON not found");
       const data = await response.json();
       familyTree = addExpandedProperty(data);
     } catch (err) {
+      // Fall back to localStorage if available
       const savedTree = localStorage.getItem("familyTree");
       if (savedTree) {
         familyTree = addExpandedProperty(JSON.parse(savedTree));
@@ -345,7 +491,23 @@ document.addEventListener("DOMContentLoaded", function () {
     const nodeContent = document.createElement("div");
     nodeContent.className = `node-content ${node.gender}`;
     if (isRoot) nodeContent.classList.add("main");
-    nodeContent.textContent = node.name;
+    
+    // Create card content
+    const cardContent = document.createElement("div");
+    cardContent.className = "card-content";
+    
+    const nameElement = document.createElement("div");
+    nameElement.className = "card-name";
+    nameElement.textContent = node.name;
+    
+    const detailsElement = document.createElement("div");
+    detailsElement.className = "card-details";
+    detailsElement.textContent = node.birthDate || "Family Member";
+    
+    cardContent.appendChild(nameElement);
+    cardContent.appendChild(detailsElement);
+    nodeContent.appendChild(cardContent);
+    
     nodeContent.dataset.name = node.name; // store for search
     nodeContent.addEventListener("click", () => toggleNode(node));
 
@@ -382,67 +544,179 @@ document.addEventListener("DOMContentLoaded", function () {
   // 🔍 Search feature
   function searchTree(query) {
     const allNodes = document.querySelectorAll(".node-content");
+    let found = false;
+    
     allNodes.forEach(node => {
       node.classList.remove("highlight");
       if (query && node.dataset.name.toLowerCase().includes(query.toLowerCase())) {
         node.classList.add("highlight");
-        node.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+        if (!found) {
+          // Scroll to the first found node
+          const rect = node.getBoundingClientRect();
+          const treeWrapperRect = treeWrapper.getBoundingClientRect();
+          
+          treeWrapper.scrollTo({
+            left: treeWrapper.scrollLeft + rect.left - treeWrapperRect.left - treeWrapperRect.width/2,
+            top: treeWrapper.scrollTop + rect.top - treeWrapperRect.top - treeWrapperRect.height/2,
+            behavior: 'smooth'
+          });
+          
+          found = true;
+        }
       }
     });
   }
 
   function setupEventListeners() {
-    zoomInBtn.addEventListener("click", () => { scale += 0.1; updateTransform(); });
-    zoomOutBtn.addEventListener("click", () => { scale = Math.max(0.1, scale - 0.1); updateTransform(); });
-    resetViewBtn.addEventListener("click", () => { scale = 1; updateTransform(); });
+    // Zoom buttons
+    zoomInBtn.addEventListener("click", () => { 
+      scale = Math.min(5, scale + 0.1); 
+      updateTransform(); 
+      updateZoomLevel();
+    });
+    
+    zoomOutBtn.addEventListener("click", () => { 
+      scale = Math.max(0.2, scale - 0.1); 
+      updateTransform(); 
+      updateZoomLevel();
+    });
+    
+    resetViewBtn.addEventListener("click", () => { 
+      scale = 1; 
+      updateTransform(); 
+      updateZoomLevel();
+      
+      // Reset scroll position
+      treeWrapper.scrollTo({
+        left: 0,
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
 
+    // Search functionality
     searchBox.addEventListener("input", (e) => {
       const query = e.target.value.trim();
       searchTree(query);
     });
 
-    // 📱 Pinch Zoom for Mobile
-    treeContainer.addEventListener("touchstart", (e) => {
-      if (e.touches.length === 2) {
+    // Desktop drag to scroll
+    treeWrapper.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.pageX - treeWrapper.offsetLeft;
+      startY = e.pageY - treeWrapper.offsetTop;
+      scrollLeft = treeWrapper.scrollLeft;
+      scrollTop = treeWrapper.scrollTop;
+      treeWrapper.style.cursor = 'grabbing';
+    });
+
+    treeWrapper.addEventListener('mouseleave', () => {
+      isDragging = false;
+      treeWrapper.style.cursor = 'grab';
+    });
+
+    treeWrapper.addEventListener('mouseup', () => {
+      isDragging = false;
+      treeWrapper.style.cursor = 'grab';
+    });
+
+    treeWrapper.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - treeWrapper.offsetLeft;
+      const y = e.pageY - treeWrapper.offsetTop;
+      const walkX = (x - startX) * 2;
+      const walkY = (y - startY) * 2;
+      treeWrapper.scrollLeft = scrollLeft - walkX;
+      treeWrapper.scrollTop = scrollTop - walkY;
+    });
+
+    // Mobile touch events for scrolling and zooming
+    treeWrapper.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        // Single touch for scrolling
+        lastTouchX = e.touches[0].clientX;
+        lastTouchY = e.touches[0].clientY;
+      } else if (e.touches.length === 2) {
+        // Two touches for pinch zoom
         const dx = e.touches[0].clientX - e.touches[1].clientX;
         const dy = e.touches[0].clientY - e.touches[1].clientY;
         lastDistance = Math.sqrt(dx * dx + dy * dy);
+        
+        // Calculate midpoint for zoom origin
+        const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+        
+        // Store current scroll position
+        scrollLeft = treeWrapper.scrollLeft;
+        scrollTop = treeWrapper.scrollTop;
       }
-    });
+    }, { passive: true });
 
-    treeContainer.addEventListener("touchmove", (e) => {
-      if (e.touches.length === 2 && lastDistance) {
+    treeWrapper.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1) {
+        // Single touch scroll
+        const touchX = e.touches[0].clientX;
+        const touchY = e.touches[0].clientY;
+        
+        const dx = touchX - lastTouchX;
+        const dy = touchY - lastTouchY;
+        
+        treeWrapper.scrollLeft -= dx;
+        treeWrapper.scrollTop -= dy;
+        
+        lastTouchX = touchX;
+        lastTouchY = touchY;
+      } else if (e.touches.length === 2) {
+        // Two touches pinch zoom
         const dx = e.touches[0].clientX - e.touches[1].clientX;
         const dy = e.touches[0].clientY - e.touches[1].clientY;
         const newDistance = Math.sqrt(dx * dx + dy * dy);
-        if (newDistance > lastDistance) {
-          scale += 0.02; // zoom in
-        } else {
-          scale = Math.max(0.1, scale - 0.02); // zoom out
-        }
-        updateTransform();
-        lastDistance = newDistance;
-      }
-    });
 
-    treeContainer.addEventListener("touchend", () => {
+        if (lastDistance) {
+          const zoomFactor = newDistance / lastDistance;
+          const newScale = scale * zoomFactor;
+          
+          // Apply scale limits
+          if (newScale >= 0.2 && newScale <= 5) {
+            scale = newScale;
+            updateTransform();
+            updateZoomLevel();
+          }
+          
+          lastDistance = newDistance;
+        }
+        
+        e.preventDefault(); // Prevent page scroll during pinch zoom
+      }
+    }, { passive: false });
+
+    treeWrapper.addEventListener('touchend', () => {
       lastDistance = null;
     });
 
-    // 🖱️ Scroll Zoom (Mouse + Touchpad)
-    treeContainer.addEventListener("wheel", (e) => {
-      e.preventDefault(); // stop page scroll
-      if (e.deltaY < 0) {
-        scale += 0.1; // zoom in
-      } else {
-        scale = Math.max(0.1, scale - 0.1); // zoom out
+    // Mouse wheel zoom
+    treeWrapper.addEventListener("wheel", (e) => {
+      // Only zoom when Ctrl key is pressed (standard zoom behavior)
+      if (e.ctrlKey) {
+        e.preventDefault();
+        if (e.deltaY < 0) {
+          scale = Math.min(5, scale + 0.1); // zoom in
+        } else {
+          scale = Math.max(0.2, scale - 0.1); // zoom out
+        }
+        updateTransform();
+        updateZoomLevel();
       }
-      updateTransform();
     }, { passive: false });
   }
 
   function updateTransform() {
     treeContainer.style.transform = `scale(${scale})`;
+  }
+  
+  function updateZoomLevel() {
+    zoomLevel.textContent = `${Math.round(scale * 100)}%`;
   }
 
   init();
