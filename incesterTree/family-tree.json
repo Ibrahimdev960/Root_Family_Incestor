@@ -41,7 +41,7 @@
                           "expanded": true
                         }
                       ],
-                      "expanded": false
+                      "expanded": true
                     },
                     {
                       "name": "Suleman Khan",
@@ -72,7 +72,7 @@
                           "expanded": true
                         }
                       ],
-                      "expanded": false
+                      "expanded": true
                     },
                     {
                       "name": "Khali ur Rehman",
@@ -122,7 +122,7 @@
                           "expanded": true
                         }
                       ],
-                      "expanded": false
+                      "expanded": true
                     },
                     {
                       "name": "Muhammad Daud",
@@ -288,7 +288,7 @@
                               "expanded": true
                             }
                           ],
-                          "expanded": true
+                          "expanded": false
                         },
                         {
                           "name": "Ayat noor",
@@ -303,7 +303,7 @@
                           "expanded": true
                         }
                       ],
-                      "expanded": false
+                      "expanded": true
                     },
                     {
                       "name": "Muhammad Arif",
@@ -382,8 +382,15 @@
                         {
                           "name": "Wasim Mubarak",
                           "gender": "male",
-                          "children": [],
-                          "expanded": true
+                          "children": [
+                            {
+                              "name": "1daughter",
+                              "gender": "female",
+                              "children": [],
+                              "expanded": true
+                            }
+                          ],
+                          "expanded": false
                         },
                         {
                           "name": "Waqar",
@@ -392,6 +399,18 @@
                             {
                               "name": "Umme Hani",
                               "gender": "female",
+                              "children": [],
+                              "expanded": true
+                            },
+                            {
+                              "name": "Huzaifa",
+                              "gender": "male",
+                              "children": [],
+                              "expanded": true
+                            },
+                            {
+                              "name": "shafy",
+                              "gender": "male",
                               "children": [],
                               "expanded": true
                             }
@@ -427,7 +446,7 @@
                               "expanded": true
                             }
                           ],
-                          "expanded": false
+                          "expanded": true
                         },
                         {
                           "name": "Sobia",
@@ -544,7 +563,7 @@
                       "expanded": true
                     }
                   ],
-                  "expanded": false
+                  "expanded": true
                 },
                 {
                   "name": "wazera",
@@ -571,7 +590,7 @@
                   "expanded": true
                 }
               ],
-              "expanded": true
+              "expanded": false
             },
             {
               "name": "Meer Hussain",
@@ -688,7 +707,7 @@
                           "expanded": true
                         }
                       ],
-                      "expanded": false
+                      "expanded": true
                     },
                     {
                       "name": "Malik",
@@ -772,12 +791,24 @@
                               "gender": "male",
                               "children": [],
                               "expanded": true
+                            },
+                            {
+                              "name": "Hammar Ali",
+                              "gender": "male",
+                              "children": [],
+                              "expanded": true
+                            },
+                            {
+                              "name": "Hanaya",
+                              "gender": "female",
+                              "children": [],
+                              "expanded": true
                             }
                           ],
-                          "expanded": false
+                          "expanded": true
                         }
                       ],
-                      "expanded": false
+                      "expanded": true
                     },
                     {
                       "name": "shameem",
@@ -810,7 +841,7 @@
                       "expanded": true
                     }
                   ],
-                  "expanded": false
+                  "expanded": true
                 },
                 {
                   "name": "Mian Daad",
@@ -977,7 +1008,7 @@
                           "expanded": true
                         }
                       ],
-                      "expanded": false
+                      "expanded": true
                     },
                     {
                       "name": "Nazir",
@@ -1123,7 +1154,7 @@
                           "expanded": true
                         }
                       ],
-                      "expanded": true
+                      "expanded": false
                     },
                     {
                       "name": "Afzal",
@@ -1178,7 +1209,7 @@
                   "expanded": true
                 }
               ],
-              "expanded": false
+              "expanded": true
             },
             {
               "name": "Ahmed Ali",
@@ -1199,7 +1230,7 @@
                           "expanded": true
                         }
                       ],
-                      "expanded": false
+                      "expanded": true
                     },
                     {
                       "name": "Saed",
@@ -1218,7 +1249,7 @@
                           "expanded": true
                         }
                       ],
-                      "expanded": false
+                      "expanded": true
                     },
                     {
                       "name": "Naeem",
@@ -1249,7 +1280,7 @@
                           "expanded": true
                         }
                       ],
-                      "expanded": false
+                      "expanded": true
                     },
                     {
                       "name": "Saboor",
@@ -1302,7 +1333,7 @@
                       "expanded": true
                     }
                   ],
-                  "expanded": false
+                  "expanded": true
                 },
                 {
                   "name": "Abdul Qadir",
@@ -1343,7 +1374,7 @@
                           "expanded": true
                         }
                       ],
-                      "expanded": true
+                      "expanded": false
                     },
                     {
                       "name": "Ghafoor",
