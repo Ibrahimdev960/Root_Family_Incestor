@@ -254,18 +254,18 @@
   font-size: 14px;
   color: #2c3e50;
 ">
-  <p>© 2025 Interactive Family Tree | Made with ❤️</p>
+  <p>© 2025 Interactive Family Tree | Made By ...</p>
 </footer>
 <script>
-
-  /* 🔐 PIN Logic */
+/* 🔐 PIN Logic */
 const CORRECT_PIN = "7456"; // ✅ change this to your PIN
 
 document.getElementById("pin-submit").addEventListener("click", () => {
   const enteredPin = document.getElementById("pin-input").value;
   if (enteredPin === CORRECT_PIN) {
     document.getElementById("pin-screen").style.display = "none";
-    document.getElementById("tree-app").style.display = "block";
+    document.querySelector(".container").style.display = "block";
+    document.querySelector("footer").style.display = "block";
   } else {
     document.getElementById("pin-error").style.display = "block";
   }
@@ -281,6 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let familyTree = { name: "Main Ancestor", gender: "male", children: [], expanded: true };
   let scale = 1;
+  let lastDistance = null;
 
   async function init() {
     await loadTree();
@@ -399,6 +400,45 @@ document.addEventListener("DOMContentLoaded", function () {
       const query = e.target.value.trim();
       searchTree(query);
     });
+
+    // 📱 Pinch Zoom for Mobile
+    treeContainer.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        lastDistance = Math.sqrt(dx * dx + dy * dy);
+      }
+    });
+
+    treeContainer.addEventListener("touchmove", (e) => {
+      if (e.touches.length === 2 && lastDistance) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const newDistance = Math.sqrt(dx * dx + dy * dy);
+        if (newDistance > lastDistance) {
+          scale += 0.02; // zoom in
+        } else {
+          scale = Math.max(0.1, scale - 0.02); // zoom out
+        }
+        updateTransform();
+        lastDistance = newDistance;
+      }
+    });
+
+    treeContainer.addEventListener("touchend", () => {
+      lastDistance = null;
+    });
+
+    // 🖱️ Scroll Zoom (Mouse + Touchpad)
+    treeContainer.addEventListener("wheel", (e) => {
+      e.preventDefault(); // stop page scroll
+      if (e.deltaY < 0) {
+        scale += 0.1; // zoom in
+      } else {
+        scale = Math.max(0.1, scale - 0.1); // zoom out
+      }
+      updateTransform();
+    }, { passive: false });
   }
 
   function updateTransform() {
@@ -408,5 +448,6 @@ document.addEventListener("DOMContentLoaded", function () {
   init();
 });
 </script>
+
 </body>
 </html>
