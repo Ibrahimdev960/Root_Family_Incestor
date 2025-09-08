@@ -670,13 +670,13 @@ document.addEventListener("DOMContentLoaded", function () {
   function setupEventListeners() {
     // Zoom buttons
     zoomInBtn.addEventListener("click", () => { 
-      scale = Math.min(5, scale + 0.1); 
+      scale = Math.min(5, scale + 0.05); 
       updateTransform(); 
       updateZoomLevel();
     });
     
     zoomOutBtn.addEventListener("click", () => { 
-      scale = Math.max(0.2, scale - 0.1); 
+      scale = Math.max(0.2, scale - 0.05); 
       updateTransform(); 
       updateZoomLevel();
     });
@@ -805,9 +805,9 @@ document.addEventListener("DOMContentLoaded", function () {
       if (e.ctrlKey) {
         e.preventDefault();
         if (e.deltaY < 0) {
-          scale = Math.min(5, scale + 0.1); // zoom in
+          scale = Math.min(5, scale + 0.05); // zoom in
         } else {
-          scale = Math.max(0.2, scale - 0.1); // zoom out
+          scale = Math.max(0.2, scale - 0.05); // zoom out
         }
         updateTransform();
         updateZoomLevel();
