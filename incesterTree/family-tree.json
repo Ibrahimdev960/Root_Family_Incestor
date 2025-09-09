@@ -15,7 +15,7 @@
               "gender": "male",
               "children": [
                 {
-                  "name": "Nur ur Rehman",
+                  "name": "N00r ur Rehman",
                   "gender": "male",
                   "children": [
                     {
@@ -90,7 +90,7 @@
                   "expanded": false
                 },
                 {
-                  "name": "Sadiq",
+                  "name": "Muhammad Sadiq",
                   "gender": "male",
                   "children": [
                     {
@@ -172,7 +172,7 @@
                           "expanded": true
                         },
                         {
-                          "name": "Usman",
+                          "name": "Muhammad Usman",
                           "gender": "male",
                           "children": [],
                           "expanded": true
@@ -184,17 +184,17 @@
                           "expanded": true
                         },
                         {
-                          "name": "Bakhtawar",
+                          "name": "Bakhtawar Asif ",
                           "gender": "female",
                           "children": [],
                           "expanded": true
                         },
                         {
-                          "name": "Rafia",
+                          "name": "Rafia Asif ",
                           "gender": "female",
                           "children": [
                             {
-                              "name": "Maryum",
+                              "name": "Maryum Kashif",
                               "gender": "female",
                               "children": [],
                               "expanded": true
@@ -384,7 +384,7 @@
                           "gender": "male",
                           "children": [
                             {
-                              "name": "1daughter",
+                              "name": "Urwah Waseem",
                               "gender": "female",
                               "children": [],
                               "expanded": true
@@ -643,7 +643,7 @@
                           "expanded": true
                         },
                         {
-                          "name": "Mukhatasid Ali",
+                          "name": "Muqtasid Ali",
                           "gender": "male",
                           "children": [],
                           "expanded": true
@@ -981,7 +981,7 @@
                               "expanded": true
                             },
                             {
-                              "name": "Nmeen",
+                              "name": "son",
                               "gender": "male",
                               "children": [],
                               "expanded": true
@@ -1327,7 +1327,7 @@
                       "expanded": false
                     },
                     {
-                      "name": "Hazra Shaheen",
+                      "name": "Azra Shaheen",
                       "gender": "female",
                       "children": [],
                       "expanded": true
