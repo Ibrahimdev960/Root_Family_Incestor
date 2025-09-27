@@ -1,0 +1,44 @@
+[{
+  "_id": {
+    "$oid": "68bb1e57a31b36c2f4571cbe"
+  },
+  "name": "Khan Family",
+  "description": "Extended family tree for Khan lineage.",
+  "createdBy": {
+    "$oid": "68bb1a48a31b36c2f4571cb9"
+  },
+  "members": [
+    {
+      "$oid": "68bb1a48a31b36c2f4571cb9"
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-09-05T17:31:03.521Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-05T17:31:03.521Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68bc2882932708cd01fd9058"
+  },
+  "name": "My Family Tree",
+  "description": "Family tree created automatically",
+  "createdBy": {
+    "$oid": "68bb30d2a31b36c2f4571cc4"
+  },
+  "members": [
+    {
+      "$oid": "68bb30d2a31b36c2f4571cc4"
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-09-06T12:26:42.096Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-06T12:26:42.096Z"
+  },
+  "__v": 0
+}]
