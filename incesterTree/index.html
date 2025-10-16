@@ -25,12 +25,12 @@
       margin: 0 auto;
     }
     
-    header {
+    header{
       text-align: center;
       margin-bottom: 20px;
-      padding: 15px;
+      padding: 9px;
       background: white;
-      border-radius: 12px;
+      border-radius: 38px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
     
@@ -44,6 +44,7 @@
       flex-wrap: wrap;
       gap: 15px;
       justify-content: center;
+      margin-top: 16px;
       margin-bottom: 20px;
       padding: 15px;
       background: white;
@@ -76,6 +77,10 @@
     
     .zoom-controls { display: flex; gap: 10px; align-items: center; }
 
+
+    #headerptag{
+      white-space: rap;
+    }
     /* Search box */
     #searchBox {
       padding: 10px;
@@ -320,8 +325,18 @@
   <div class="container" style="display:none;">
     <header>
       <h1>Interactive Family Tree</h1>
-      <p>Visualize your family connections with this interactive tool</p>
+      <!-- <p id="headerptag">Visualize your family connections with this interactive tool</p> -->
     </header>
+    
+    
+    
+    <div class="tree-wrapper" id="treeWrapper">
+      <div class="tree-container" id="treeContainer">
+        <div class="tree" id="treeVisualization"></div>
+      </div>
+    </div>
+
+    
     
     <div class="controls">
       <input type="text" id="searchBox" placeholder="🔍Expand All, then search by name..."/>
@@ -331,16 +346,9 @@
         <button id="resetView" class="btn-primary">Reset View</button>
         <button id="collapseAll" class="btn-warning">Collapse All</button>
         <button id="expandAll" class="btn-success">Expand All</button>
-        <span class="zoom-level" id="zoomLevel">100%</span>
+        <!-- <span class="zoom-level" id="zoomLevel">100%</span> -->
       </div>
     </div>
-    
-    <div class="tree-wrapper" id="treeWrapper">
-      <div class="tree-container" id="treeContainer">
-        <div class="tree" id="treeVisualization"></div>
-      </div>
-    </div>
-    
     <p class="instructions">
       Click nodes to expand/collapse. First Expand and then search to find members. Pinch/scroll to zoom.
     </p>
