@@ -449,6 +449,24 @@ document.addEventListener("DOMContentLoaded", function () {
   let startX, startY, scrollLeft, scrollTop;
   let lastTouchX, lastTouchY;
 
+function filterMaleMembers(node) {
+  if (!node) return null;
+
+  // If node is not male, skip it completely
+  if (node.gender !== "male") return null;
+
+  // Otherwise, keep only male children
+  const filteredChildren = [];
+  if (node.children && node.children.length > 0) {
+    for (const child of node.children) {
+      const filteredChild = filterMaleMembers(child);
+      if (filteredChild) filteredChildren.push(filteredChild);
+    }
+  }
+
+  return { ...node, children: filteredChildren };
+}
+
   async function init() {
     await loadTree();
     renderTree();
@@ -456,21 +474,27 @@ document.addEventListener("DOMContentLoaded", function () {
     updateZoomLevel();
   }
 
-  async function loadTree() {
-    try {
-      // Try to load from a JSON file first
-      const response = await fetch("/family-tree.json");
-      if (!response.ok) throw new Error("JSON not found");
-      const data = await response.json();
-      familyTree = addExpandedProperty(data, false); // Start with all nodes collapsed
-    } catch (err) {
-      // Fall back to localStorage if available
-      const savedTree = localStorage.getItem("familyTree");
-      if (savedTree) {
-        familyTree = addExpandedProperty(JSON.parse(savedTree), false);
-      }
+async function loadTree() {
+  try {
+    const response = await fetch("/family-tree.json");
+    if (!response.ok) throw new Error("JSON not found");
+    const data = await response.json();
+
+    // ✅ Filter to include only male members
+    const maleOnlyTree = filterMaleMembers(data);
+
+    // Add expanded property
+    familyTree = addExpandedProperty(maleOnlyTree, false);
+  } catch (err) {
+    const savedTree = localStorage.getItem("familyTree");
+    if (savedTree) {
+      const parsedTree = JSON.parse(savedTree);
+      const maleOnlyTree = filterMaleMembers(parsedTree);
+      familyTree = addExpandedProperty(maleOnlyTree, false);
     }
   }
+}
+
 
   function addExpandedProperty(node, expanded = false) {
     const newNode = { ...node };
