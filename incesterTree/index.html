@@ -213,7 +213,7 @@
     }
     
     .connector { position: absolute; background: #7f8c8d; z-index: 1; }
-    .vertical-connector { width: 2px; height: 30px; top: -30px; left: 50%; transform: translateX(-50%); }
+    .vertical-connector { width: 2px; height: 30px; top:  -23px;; left: 50%; transform: translateX(-50%); }
     .horizontal-connector { height: 3px; width: 100%; margin: -88px 15px; position: absolute; top: 113px; }
     
     .children { display: flex; justify-content: center; position: relative; margin-top: 30px; }
@@ -263,14 +263,14 @@
 
     @media (max-width: 480px) {
       .node-content {
-        padding: 10px 12px 10px 30px;
+        padding: 8px 10px 8px 28px;
         min-width: 120px;
       }
       
       .expand-button {
         left: 10px;
-        width: 18px;
-        height: 18px;
+        width: 15px;
+        height: 15px;
         font-size: 12px;
       }
     }
@@ -310,6 +310,105 @@
       margin-top: 10px;
       display: none;
     }
+    /* ========================added new styles =============================== */
+    /* 📱 Improved Mobile Responsive Design for ~370px width */
+@media (max-width: 400px) {
+  body {
+    padding: 10px;
+  }
+
+  .tree-wrapper {
+    /* height: 80vh;
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; */
+  }
+
+  .tree-container {
+    /* transform-origin: top center;
+    padding: 10px;
+    min-width: 600px; ensures structure fits inside horizontally scrollable area */
+  }
+
+  .tree {
+    /* flex-direction: column;
+    align-items: center;
+    justify-content: center; */
+  }
+
+  .level {
+    /* flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 40px; */
+  }
+
+  .node {
+    margin: 4px;
+    /* max-width: 140px; */
+    min-width: 100px;
+  }
+
+  .node-content {
+    padding: 8px 10px 8px 26px;
+    font-size: 13px;
+    white-space: nowrap;
+    border-radius: 10px;
+    min-width: 110px;
+    text-align: center;
+  }
+
+  .card-name {
+    /* font-size: 14px; */
+    /* word-wrap: nowrap; */
+  }
+
+  .card-details {
+    /* font-size: 11px; */
+  }
+
+   .expand-button {
+        left: 10px;
+        width: 15px;
+        height: 15px;
+        font-size: 12px;
+      }
+
+  .horizontal-connector {
+    height: 2px;
+    top: -15px;
+    margin: 0 10px;
+  }
+
+  .vertical-connector {
+    /* height: 25px; */
+    height: 36px;
+    top: -19px;
+    
+  }
+
+  .controls {
+    /* flex-direction: column;
+    align-items: stretch;
+    padding: 10px; */
+  }
+
+  #searchBox {
+    /* width: 100%; */
+  }
+
+  button {
+    /* font-size: 14px;
+    padding: 8px 10px; */
+  }
+
+  footer {
+    font-size: 12px;
+    padding: 10px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -575,7 +674,9 @@ async function loadTree() {
     
     const detailsElement = document.createElement("div");
     detailsElement.className = "card-details";
-    detailsElement.textContent = node.birthDate || "Family Member";
+    // detailsElement.textContent = node.birthDate || "Family Member";
+    detailsElement.textContent = node.birthDate || "";
+
     
     cardContent.appendChild(nameElement);
     cardContent.appendChild(detailsElement);
