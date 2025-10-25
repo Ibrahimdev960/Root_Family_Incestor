@@ -1,25 +1,25 @@
 {
-  "name": "Baba Dildar Awan",
+  "name": "بابا دلدار اعوان",
   "gender": "male",
   "children": [
     {
-      "name": "Hashim Ali",
+      "name": "ہاشم علی",
       "gender": "male",
       "children": [
         {
-          "name": "Khair-Ali",
+          "name": "خیر علی",
           "gender": "male",
           "children": [
             {
-              "name": "Abdullah",
+              "name": "عبداللہ",
               "gender": "male",
               "children": [
                 {
-                  "name": "Nur ur Rehman",
+                  "name": "نور الرحمان",
                   "gender": "male",
                   "children": [
                     {
-                      "name": "Saif Ur Rehman",
+                      "name": "سیف الرحمان",
                       "gender": "male",
                       "children": [
                         {
@@ -547,25 +547,25 @@
                   "expanded": false
                 },
                 {
-                  "name": "wazera",
+                  "name": "وزیرہ",
                   "gender": "female",
                   "children": [],
                   "expanded": true
                 },
                 {
-                  "name": "Zardan",
+                  "name": "زردان",
                   "gender": "female",
                   "children": [],
                   "expanded": true
                 },
                 {
-                  "name": "Masrad",
+                  "name": "مسرد",
                   "gender": "female",
                   "children": [],
                   "expanded": true
                 },
                 {
-                  "name": "Reshma",
+                  "name": "ریشما۔",
                   "gender": "female",
                   "children": [],
                   "expanded": true
@@ -574,15 +574,15 @@
               "expanded": false
             },
             {
-              "name": "Meer Hussain",
+              "name": "میر حسین",
               "gender": "male",
               "children": [
                 {
-                  "name": "Fazal Hussain",
+                  "name": "فضل حسین",
                   "gender": "male",
                   "children": [
                     {
-                      "name": "Usama",
+                      "name": "اسامہ",
                       "gender": "male",
                       "children": [
                         {
@@ -813,7 +813,7 @@
                   "expanded": false
                 },
                 {
-                  "name": "Mian Daad",
+                  "name": "میاں داد",
                   "gender": "male",
                   "children": [
                     {
@@ -1466,19 +1466,19 @@
           "expanded": false
         },
         {
-          "name": "Hanayat Ali",
+          "name": "حنایت علی",
           "gender": "male",
           "children": [],
           "expanded": false
         },
         {
-          "name": "Abdullah1",
+          "name": "عبداللہ ",
           "gender": "male",
           "children": [],
           "expanded": false
         },
         {
-          "name": "Shazullah",
+          "name": "شاذ اللہ",
           "gender": "male",
           "children": [
             {
@@ -1590,17 +1590,17 @@
           "expanded": false
         },
         {
-          "name": "Mol ALi",
+          "name": "موت والی",
           "gender": "male",
           "children": [],
           "expanded": false
         },
         {
-          "name": "Noor Ali",
+          "name": "نور علی",
           "gender": "male",
           "children": [
             {
-              "name": "Sher Zman",
+              "name": "شیر زمان",
               "gender": "male",
               "children": [
                 {
@@ -1777,11 +1777,11 @@
       "expanded": true
     },
     {
-      "name": "Ameer Ullah",
+      "name": "امیر اللہ",
       "gender": "male",
       "children": [
         {
-          "name": "Feroz Baba",
+          "name": "فیروز بابا",
           "gender": "male",
           "children": [
             {

@@ -409,6 +409,7 @@
   }
 }
 
+
   </style>
 </head>
 <body>
@@ -966,6 +967,30 @@ async function loadTree() {
   }
 
   init();
+});
+</script>
+<!-- Place this just before </body> -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const parents = document.querySelectorAll(".parent-node");
+
+  parents.forEach(parent => {
+    const connector = parent.querySelector(".vertical-connector");
+    const children = parent.querySelectorAll(".child-node");
+    if (!connector || children.length === 0) return;
+
+    const midpoint = children.length / 2;
+    const base = 50;
+    let h = midpoint * base;
+
+    if (midpoint % 1 !== 0) {
+      h = Math.ceil(midpoint) * base;
+      const rand = children[Math.floor(Math.random() * children.length)];
+      rand.style.marginTop = "15px";
+    }
+
+    connector.style.height = `${h}px`;
+  });
 });
 </script>
 
