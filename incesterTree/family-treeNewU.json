@@ -1181,7 +1181,7 @@
               "expanded": false
             },
             {
-              "name": "Ahmed Ali",
+              "name": "احمد علی",
               "gender": "male",
               "children": [
                 {
@@ -1457,7 +1457,7 @@
               "expanded": false
             },
             {
-              "name": "Kala Khan",
+              "name": "کالا خان",
               "gender": "male",
               "children": [],
               "expanded": true
@@ -1668,7 +1668,7 @@
                   "expanded": false
                 },
                 {
-                  "name": "ali zman",
+                  "name": "علی زمان",
                   "gender": "male",
                   "children": [
                     {
@@ -1702,11 +1702,11 @@
               "expanded": true
             },
             {
-              "name": "shah zman",
+              "name": "شاہ زمان",
               "gender": "male",
               "children": [
                 {
-                  "name": "muhammad zman",
+                  "name": "محمد زمان",
                   "gender": "male",
                   "children": [],
                   "expanded": true
@@ -1785,7 +1785,7 @@
           "gender": "male",
           "children": [
             {
-              "name": "Zain",
+              "name": "زین",
               "gender": "male",
               "children": [
                 {
@@ -1804,7 +1804,7 @@
               "expanded": false
             },
             {
-              "name": "Aslam",
+              "name": "اسلم",
               "gender": "male",
               "children": [
                 {
@@ -1847,15 +1847,15 @@
       "expanded": true
     },
     {
-      "name": "Aziz Ullah",
+      "name": "عزیز اللہ",
       "gender": "male",
       "children": [
         {
-          "name": "khurla",
+          "name": "خرلا",
           "gender": "male",
           "children": [
             {
-              "name": "Alizman",
+              "name": "علیزمان",
               "gender": "male",
               "children": [
                 {
@@ -2033,7 +2033,7 @@
               "expanded": false
             },
             {
-              "name": "Muhammad Zaman",
+              "name": "محمد زمان",
               "gender": "male",
               "children": [
                 {
